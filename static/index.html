@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+  <h1>Hello</h1>
+  <div id="messages"></div>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+  <script>
+    function write() {
+       var e = document.createElement('p');
+       e.innerHTML = Array.prototype.slice.call(arguments).join(' ');
+       document.getElementById('messages').appendChild(e);
+    }
+    var sock = new SockJS('/api');
+    sock.onopen = function() {
+        write('open');
+        sock.send('shit');
+    }
+    sock.onmessage = function(e) {
+        write('msg:', e.data);
+    }
+    sock.onclose = function() {
+        write('close');
+    }
+  </script>
+</body>
+</html>
