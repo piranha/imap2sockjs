@@ -7,15 +7,18 @@
   <div id="messages"></div>
   <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
   <script>
+    var sock = new SockJS('/api');
     function write() {
        var e = document.createElement('p');
        e.innerHTML = Array.prototype.slice.call(arguments).join(' ');
        document.getElementById('messages').appendChild(e);
     }
-    var sock = new SockJS('/api');
+    function send(obj) {
+        return sock.send(JSON.stringify(obj));
+    }
     sock.onopen = function() {
         write('open');
-        sock.send('shit');
+        send({id: 'a1', name: 'login', args: ['login', 'password']});
     }
     sock.onmessage = function(e) {
         write('msg:', e.data);
